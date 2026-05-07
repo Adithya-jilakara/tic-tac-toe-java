@@ -9,6 +9,7 @@ A two-player console-based Tic Tac Toe game developed using Java and basic OOP c
 - Win condition checking
 - Draw condition checking
 - Dynamic board updates
+- Replay option
 
 ## Technologies Used
 
@@ -36,7 +37,6 @@ src/
 
 ## Future Improvements
 
-- Replay option
 - AI opponent
 - GUI version
 - Score tracking
