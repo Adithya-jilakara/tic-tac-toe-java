@@ -2,12 +2,31 @@ package tictactoe;
 import java.util.Scanner;
 
 public class TicTacToe {
+	 static Scanner sc=new Scanner(System.in);
 	 static char[] board = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
 	 static char currentPlayer = 'X';
 
 	public static void main(String[] args) {
-		 Scanner sc = new Scanner(System.in);
-	        boolean gameRunning = true;
+		boolean playAgain = true;
+
+	    while (playAgain) {
+
+	        resetBoard();
+
+	        playGame();
+
+	        playAgain =  askPlayAgain();
+	    }
+
+	    System.out.println("You chose to exit!!!");
+
+	    sc.close();   
+
+	}
+	
+	  static void playGame() {
+		  
+		  boolean gameRunning = true;
 
 	        System.out.println("Welcome to Tic Tac Toe!");
 	        printBoard();
@@ -39,11 +58,10 @@ public class TicTacToe {
 	                switchPlayer();
 	            }
 	        }
-
-	        sc.close();
-
-	}
-	
+	        
+	        
+	        
+	  }
 	 static void printBoard() {
 	        System.out.println();
 	        System.out.println(" " + display(0) + " | " + display(1) + " | " + display(2));
@@ -95,6 +113,39 @@ public class TicTacToe {
 	        }
 
 	        return false;
+	    }
+	    static void resetBoard() {
+	        for (int i = 0; i < board.length; i++) {
+	            board[i] = ' ';
+	        }
+	        currentPlayer = 'X';
+	    }
+	    
+	    
+	    static boolean askPlayAgain() {
+
+	        while (true) {
+
+	            System.out.println("Do You Want To Play Again --> 1.YES  2.NO");
+	            if (!sc.hasNextInt()) {
+	                System.out.println("Please enter a valid number!");
+	                sc.next(); // removes invalid input
+	                continue;
+	            }
+
+	            int position = sc.nextInt();
+
+	            if (position == 1) {
+	                return true;
+	            }
+
+	            if (position == 2) {
+	                return false;
+	            }
+
+	            System.out.println("Please enter a valid number!");
+	            
+	        }
 	    }
 
 }
