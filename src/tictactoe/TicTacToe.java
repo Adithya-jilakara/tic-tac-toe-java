@@ -1,151 +1,205 @@
 package tictactoe;
+
 import java.util.Scanner;
+import java.util.Random;
 
 public class TicTacToe {
-	 static Scanner sc=new Scanner(System.in);
-	 static char[] board = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
-	 static char currentPlayer = 'X';
 
-	public static void main(String[] args) {
-		boolean playAgain = true;
+    static Scanner sc = new Scanner(System.in);
+    static Random random = new Random();
 
-	    while (playAgain) {
+    static char[] board = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
+    static char currentPlayer = 'X';
+    static boolean Computer = false;
 
-	        resetBoard();
+    public static void main(String[] args) {
+        boolean playAgain = true;
 
-	        playGame();
+        chooseGameMode();
 
-	        playAgain =  askPlayAgain();
-	    }
+        while (playAgain) {
+            resetBoard();
+            playGame();
+            playAgain = askPlayAgain();
+        }
 
-	    System.out.println("You chose to exit!!!");
+        System.out.println("You chose to exit!!!");
+        sc.close();
+    }
 
-	    sc.close();   
+    static void chooseGameMode() {
+        while (true) {
+            System.out.println("Choose Game Mode:");
+            System.out.println("1. Human vs Human");
+            System.out.println("2. Human vs Computer");
+            System.out.print("Enter your option: ");
 
-	}
-	
-	  static void playGame() {
-		  
-		  boolean gameRunning = true;
+            if (!sc.hasNextInt()) {
+                System.out.println("Please enter a valid number!");
+                sc.next();
+                continue;
+            }
 
-	        System.out.println("Welcome to Tic Tac Toe!");
-	        printBoard();
+            int option = sc.nextInt();
 
-	        while (gameRunning) {
-	            System.out.println("Player " + currentPlayer + ", enter position (1-9): ");
-	            int position = sc.nextInt();
+            if (option == 1) {
+                Computer = false;
+                break;
+            } else if (option == 2) {
+                Computer = true;
+                break;
+            } else {
+                System.out.println("Invalid option! Choose 1 or 2.");
+            }
+        }
+    }
 
-	            if (position < 1 || position > 9) {
-	                System.out.println("Invalid position! Choose between 1 and 9.");
-	                continue;
-	            }
+    static void playGame() {
+        boolean gameRunning = true;
 
-	            if (board[position - 1] != ' ') {
-	                System.out.println("That position is already taken. Try again.");
-	                continue;
-	            }
+        System.out.println("Welcome to Tic Tac Toe!");
+        printBoard();
 
-	            board[position - 1] = currentPlayer;
-	            printBoard();
+        while (gameRunning) {
+            int position;
 
-	            if (checkWin()) {
-	                System.out.println("Player " + currentPlayer + " wins!");
-	                gameRunning = false;
-	            } else if (checkDraw()) {
-	                System.out.println("It's a draw!");
-	                gameRunning = false;
-	            } else {
-	                switchPlayer();
-	            }
-	        }
-	        
-	        
-	        
-	  }
-	 static void printBoard() {
-	        System.out.println();
-	        System.out.println(" " + display(0) + " | " + display(1) + " | " + display(2));
-	        System.out.println("---+---+---");
-	        System.out.println(" " + display(3) + " | " + display(4) + " | " + display(5));
-	        System.out.println("---+---+---");
-	        System.out.println(" " + display(6) + " | " + display(7) + " | " + display(8));
-	        System.out.println();
-	    }
+            if (Computer && currentPlayer == 'O') {
+                position = computerMove();
+                System.out.println("Computer chose position: " + position);
+            } else {
+                System.out.println("Player " + currentPlayer + ", enter position (1-9): ");
 
-	    static char display(int index) {
-	        if (board[index] == ' ') {
-	            return (char) ('1' + index);
-	        }
-	        return board[index];
-	    }
+                if (!sc.hasNextInt()) {
+                    System.out.println("Please enter a valid number!");
+                    sc.next();
+                    continue;
+                }
 
-	    static void switchPlayer() {
-	        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
-	    }
+                position = sc.nextInt();
+            }
 
-	    static boolean checkDraw() {
-	        for (char cell : board) {
-	            if (cell == ' ') {
-	                return false;
-	            }
-	        }
-	        return true;
-	    }
+            if (position < 1 || position > 9) {
+                System.out.println("Invalid position! Choose between 1 and 9.");
+                continue;
+            }
 
-	    static boolean checkWin() {
-	        int[][] winConditions = {
-	            {0, 1, 2},
-	            {3, 4, 5},
-	            {6, 7, 8},
-	            {0, 3, 6},
-	            {1, 4, 7},
-	            {2, 5, 8},
-	            {0, 4, 8},
-	            {2, 4, 6}
-	        };
+            if (board[position - 1] != ' ') {
+                System.out.println("That position is already taken. Try again.");
+                continue;
+            }
 
-	        for (int[] condition : winConditions) {
-	            if (board[condition[0]] == currentPlayer &&
-	                board[condition[1]] == currentPlayer &&
-	                board[condition[2]] == currentPlayer) {
-	                return true;
-	            }
-	        }
+            board[position - 1] = currentPlayer;
+            printBoard();
 
-	        return false;
-	    }
-	    static void resetBoard() {
-	        for (int i = 0; i < board.length; i++) {
-	            board[i] = ' ';
-	        }
-	        currentPlayer = 'X';
-	    }
-	    
-	    
-	    static boolean askPlayAgain() {
+            if (checkWin()) {
+                if (Computer && currentPlayer == 'O') {
+                    System.out.println("Computer wins!");
+                } else {
+                    System.out.println("Player " + currentPlayer + " wins!");
+                }
+                gameRunning = false;
+            } else if (checkDraw()) {
+                System.out.println("It's a draw!");
+                gameRunning = false;
+            } else {
+                switchPlayer();
+            }
+        }
+    }
 
-	        while (true) {
+    static int computerMove() {
+        int position;
 
-	            System.out.println("Do You Want To Play Again --> 1.YES  2.NO");
-	            if (!sc.hasNextInt()) {
-	                System.out.println("Please enter a valid number!");
-	                sc.next(); // removes invalid input
-	                continue;
-	            }
+        while (true) {
+            position = random.nextInt(9) + 1;
 
-	            int position = sc.nextInt();
+            if (board[position - 1] == ' ') {
+                return position;
+            }
+        }
+    }
 
-	            if (position == 1) {
-	                return true;
-	            }
+    static void printBoard() {
+        System.out.println();
+        System.out.println(" " + display(0) + " | " + display(1) + " | " + display(2));
+        System.out.println("---+---+---");
+        System.out.println(" " + display(3) + " | " + display(4) + " | " + display(5));
+        System.out.println("---+---+---");
+        System.out.println(" " + display(6) + " | " + display(7) + " | " + display(8));
+        System.out.println();
+    }
 
-	            if (position == 2) {
-	                return false;
-	            }
+    static char display(int index) {
+        if (board[index] == ' ') {
+            return (char) ('1' + index);
+        }
+        return board[index];
+    }
 
-	            System.out.println("Please enter a valid number!");
-	            
-	        }
-	    }
+    static void switchPlayer() {
+        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+    }
 
+    static boolean checkDraw() {
+        for (char cell : board) {
+            if (cell == ' ') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static boolean checkWin() {
+        int[][] winConditions = {
+            {0, 1, 2},
+            {3, 4, 5},
+            {6, 7, 8},
+            {0, 3, 6},
+            {1, 4, 7},
+            {2, 5, 8},
+            {0, 4, 8},
+            {2, 4, 6}
+        };
+
+        for (int[] condition : winConditions) {
+            if (board[condition[0]] == currentPlayer &&
+                board[condition[1]] == currentPlayer &&
+                board[condition[2]] == currentPlayer) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    static void resetBoard() {
+        for (int i = 0; i < board.length; i++) {
+            board[i] = ' ';
+        }
+        currentPlayer = 'X';
+    }
+
+    static boolean askPlayAgain() {
+        while (true) {
+            System.out.println("Do You Want To Play Again --> 1.YES  2.NO");
+
+            if (!sc.hasNextInt()) {
+                System.out.println("Please enter a valid number!");
+                sc.next();
+                continue;
+            }
+
+            int option = sc.nextInt();
+
+            if (option == 1) {
+                return true;
+            }
+
+            if (option == 2) {
+                return false;
+            }
+
+            System.out.println("Please enter a valid number!");
+        }
+    }
 }
