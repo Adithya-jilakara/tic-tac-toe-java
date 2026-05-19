@@ -13,6 +13,30 @@ A two-player console-based Tic Tac Toe game developed using Java and basic OOP c
 - Human vs human gameplay mode
 - Human vs computer gameplay mode
 
+## Screenshots
+
+### Game Mode Selection
+
+![Game Mode Selection](screenshots/mode-selection.png)
+
+### Gameplay
+
+![Gameplay](screenshots/gameplay.png)
+
+### Replay Option
+
+![Replay Option](screenshots/replay-option.png)
+
+
+
+### Validation
+
+![validation](screenshots/validation.png)
+
+
+
+
+
 ## Technologies Used
 
 - Java
